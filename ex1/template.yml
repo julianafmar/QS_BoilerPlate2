@@ -4,38 +4,59 @@
 report:
   # Start of the first vulnerability report entry
   - bug:
-      # 'type': The name of the type of vulnerability discovered, e.g.,
-      # Nullptr Dereference
-      type: Nullptr Dereference
-      # 'lineno': The number of the line where the bug was discovered
-      lineno: 106
-      # 'class' options:
-      #   - 'tp' (true positive) for confirmed vulnerabilities
-      #   - 'fp' (false positive) for incorrectly flagged issues
-      #   - 'fn' (false negative) for bugs identified manually
-      class: tp
-      # 'description': Additional details or context about the vulnerability
-      description: optional
-      # 'recommendation': Suggested actions or mitigations for the vulnerability
-      recommendation: optional
+      type: Null Dereference
+      lineno: 76
+      class: TP
+      description:
+        Found with infer. In line 61 "map" is assigned but there is no 
+        verification meaning this could be null.
+      recommendation: 
+        There should be an if to verify this variable
+        and, not being null, do the operations.
   # End of the first vulnerability report entry
 
   # Start of the second vulnerability report entry
   - bug:
-      type: TODO
-      lineno: TODO
-      class: TODO
-      description: optional
-      recommendation: optional
+      type: Memory Leak
+      lineno: 130
+      class: TP
+      description: 
+        Found with infer. The structure "entries" is created and allocated and
+        are not freed before the end of the function
+      recommendation: 
+        Free entries
   # End of the second vulnerability report entry
 
   # Start of the third vulnerability report entry
   - bug:
-      type: TODO
-      lineno: TODO
-      class: TODO
-      description: optional
-      recommendation: optional
+      type: Memory Leak
+      lineno: 156
+      class: TP
+      description: 
+        Found with infer. Variable "val" is allocated and not freed
+      recommendation: 
+        Free val
   # End of the third vulnerability report entry
 
-  # You can continue adding more entries for additional vulnerabilities as needed.
+  # Start of the fourth vulnerability report entry
+  - bug:
+      type: Null Dereference
+      lineno: 156
+      class: TP
+      description: 
+        Found with infer. Variable "val" might be null
+      recommendation: 
+        Verify variable val, after assigning it
+  # End of the fourth vulnerability report entry
+
+  # Start of the fifth vulnerability report entry
+  - bug:
+      type: Nullptr Dereference
+      lineno: 163
+      class: TP
+      description: 
+        Found with infer. Functin hashmap_new might return null, so 
+        variable "map" might be assigned to null
+      recommendation: 
+        Verify if output is null
+  # End of the fifth vulnerability report entry
