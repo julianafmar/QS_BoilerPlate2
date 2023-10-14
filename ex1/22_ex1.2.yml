@@ -61,7 +61,7 @@ report:
         Free variable "ret"
   # End of the third vulnerability report entry
 
-    # Start of the fourth vulnerability report entry
+  # Start of the fourth vulnerability report entry
   - bug:
       type: Buffer Overflow
       lineno: 125
@@ -74,7 +74,7 @@ report:
         that support length arguments such as 'strlcpy'
   # End of the fourth vulnerability report entry
 
-    # Start of the fifth vulnerability report entry
+  # Start of the fifth vulnerability report entry
   - bug:
       type: 
       lineno: 
