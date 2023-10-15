@@ -517,3 +517,70 @@ static RBNode *get_successor_node(TreeTable const * const table, RBNode *x)
     }
     return y;
 }
+
+int balanced(TreeTable* t) {
+    RBNode *n = t->root;
+    RBNode *s = t->sentinel;
+
+    int leftHeight = 0;
+    int rightHeight = 0;
+
+    if (n == s)
+        return 1;
+
+    if (n->left != s)
+        leftHeight = height(n->left, s);
+    if (n->right != s)
+        rightHeight = height(n->right, s);
+
+    if (abs(leftHeight - rightHeight) <= 1)
+        return 1;
+    else
+        return 0;
+}
+
+int height(RBNode *n, RBNode *s) {
+    if (n == s)
+        return 0;
+
+    int leftHeight = 0;
+    int rightHeight = 0;
+
+    if (n->left != s)
+        leftHeight = height(n->left, s);
+    if (n->right != s)
+        rightHeight = height(n->right, s);
+
+    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
+}
+
+/*Implement a C function int sorted(TreeTable* t) that returns 1 if the tree table t is key sorted
+and 0 otherwise. In particular, this function should return the value 1 when, for any given node, its
+key is greater than all the keys in the left subtree and smaller than all the keys in its right subtree.
+*/
+
+int sorted(TreeTable* t) {
+    RBNode *n = t->root;
+    RBNode *s = t->sentinel;
+
+    if (n == s)
+        return 1;
+
+    if (n->left != s && n->right != s) {
+        if (t->cmp(n->key, n->left->key) < 0 && t->cmp(n->key, n->right->key) > 0)
+            return sorted(n->left) && sorted(n->right);
+        else
+            return 0;
+    } else if (n->left != s) {
+        if (t->cmp(n->key, n->left->key) < 0)
+            return sorted(n->left);
+        else
+            return 0;
+    } else if (n->right != s) {
+        if (t->cmp(n->key, n->right->key) > 0)
+            return sorted(n->right);
+        else
+            return 0;
+    } else
+        return 1;
+}
