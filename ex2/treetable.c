@@ -554,11 +554,6 @@ int height(RBNode *n, RBNode *s) {
     return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
 }
 
-/*Implement a C function int sorted(TreeTable* t) that returns 1 if the tree table t is key sorted
-and 0 otherwise. In particular, this function should return the value 1 when, for any given node, its
-key is greater than all the keys in the left subtree and smaller than all the keys in its right subtree.
-*/
-
 int sorted(TreeTable* t) {
     RBNode *n = t->root;
     RBNode *s = t->sentinel;
