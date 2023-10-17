@@ -22,57 +22,6 @@ report:
 
 
 
-  
-
-  # Start of the first vulnerability report entry
-  - bug: 
-      type: Null Pointer Dereference
-      lineno: 72
-      class: TP (FN se considerarmos que so o primeiro comando e que conta)
-      description: 
-        Found with clang analizer. In function hashmap_new, if allocation of the variable "fields" fails,
-        the code is assigning "0" to the variable "size" that is a part of "field" which is a null pointer.
-      recommendation: 
-        Verify if allocation of variable "field" fails 
-
-  # End of the first vulnerability report entry
-
-  # Start of the second vulnerability report entry
-  - bug:
-      type: 
-      lineno: 124
-      class: FP (FN se considerarmos que so o primeiro comando e que conta)
-      description: 
-        Result of 'malloc' is converted to a pointer of type 'char',
-        which is incompatible with sizeof operand type 'char *'
-      recommendation: 
-        Let it be, let it live, its fine
-  # End of the second vulnerability report entry
-
-  # Start of the third vulnerability report entry
-  - bug:
-      type: Memory Leak
-      lineno: 170
-      class: TP (FN se considerarmos que so o primeiro comando e que conta)
-      description: 
-        Found with clang analizer. Variable "ret" is allocated and not freed 
-        after used
-      recommendation: 
-        Free variable "ret"
-  # End of the third vulnerability report entry
-
-  # Start of the fourth vulnerability report entry
-  - bug:
-      type: Buffer Overflow
-      lineno: 125
-      class: TP
-      description: 
-        Call to function 'strcpy' is insecure as it does not provide
-        bounding of the memory buffer. 
-      recommendation: 
-        Replace unbounded copy functions with analogous functions 
-        that support length arguments such as 'strlcpy'
-  # End of the fourth vulnerability report entry
 
   # Start of the fifth vulnerability report entry
   - bug:

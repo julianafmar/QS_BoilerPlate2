@@ -60,23 +60,30 @@ struct hashmap_entry {
 hashmap_t hashmap_new(int size) {
   hashmap_t map = (hashmap_t)malloc(sizeof(struct hashmap_s));
 
+  if(map == NULL) {
+    exit(1);
+  }
+
   struct hashmap_field *fields =
       (struct hashmap_field *)malloc(sizeof(struct hashmap_field) * size);
 
   if (!fields) {
     free(map);
+    exit(1);
   }
 
   for (int i = 0; i < size; i++) {
     struct hashmap_field *field = &fields[i];
-    field->size = 0;
-    field->entries = NULL;
+    if(field != NULL) {
+      field->size = 0;
+      field->entries = NULL;
+    }
   }
 
-  if(map != NULL) {
-    map->size = size;
-    map->fields = fields;
-  }
+  if(map == NULL) exit(1);
+
+  map->size = size;
+  map->fields = fields;
 
   return map;
 }
@@ -119,12 +126,17 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
   field->size++;
   struct hashmap_entry *entries = (struct hashmap_entry *)malloc(
       field->size * sizeof(struct hashmap_entry));
-  memcpy(entries, field->entries,
+  if (size(entries) >= (field->size - 1) * sizeof(struct hashmap_entry) 
+      && size(field->entries) >= (field->size - 1) * sizeof(struct hashmap_entry))
+    memcpy(entries, field->entries,
          (field->size - 1) * sizeof(struct hashmap_entry));
+  else exit(1);
 
   entry = &entries[field->size - 1];
   entry->key = (char *)malloc(sizeof(key));
-  strcpy(entry->key, key);
+  if(size(entry->key) >= size(key)) {
+    strcpy(entry->key, key);
+  } else exit(1);
 
   field->entries = entries;
 
@@ -133,7 +145,11 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
 set_val:
   if (value != NULL) {
     void *val = malloc(length);
-    entry->val = memcpy(val, value, length);
+
+    if (size(val) >= length && size(value) >= length) {
+      entry->val = memcpy(val, value, length);
+    } else exit(1);
+    
     entry->len = length;
   } else {
     free(entry->key);
@@ -176,6 +192,7 @@ int main() {
 
   int *ret = (int *)hashmap_get(map, key);
   assert(*ret == value);
+  free(ret); // Verificar
 
   hashmap_free(map);
   return 0;
