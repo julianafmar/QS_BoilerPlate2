@@ -563,17 +563,37 @@ int sorted(TreeTable* t) {
 
     if (n->left != s && n->right != s) {
         if (t->cmp(n->key, n->left->key) < 0 && t->cmp(n->key, n->right->key) > 0)
-            return sorted(n->left) && sorted(n->right);
+            return sorted_node(n->left, s) && sorted_node(n->right, s);
         else
             return 0;
     } else if (n->left != s) {
         if (t->cmp(n->key, n->left->key) < 0)
-            return sorted(n->left);
+            return sorted_node(n->left, s);
         else
             return 0;
     } else if (n->right != s) {
         if (t->cmp(n->key, n->right->key) > 0)
-            return sorted(n->right);
+            return sorted_node(n->right, s);
+        else
+            return 0;
+    } else
+        return 1;
+}
+
+int sorted_node(RBNode* n, RBNode* s) {
+    if (n->left != s && n->right != s) {
+        if (cmp(n->key, n->left->key) < 0 && cmp(n->key, n->right->key) > 0)
+            return sorted_node(n->left, s) && sorted_node(n->right, s);
+        else
+            return 0;
+    } else if (n->left != s) {
+        if (cmp(n->key, n->left->key) < 0)
+            return sorted_node(n->left, s);
+        else
+            return 0;
+    } else if (n->right != s) {
+        if (cmp(n->key, n->right->key) > 0)
+            return sorted_node(n->right, s);
         else
             return 0;
     } else

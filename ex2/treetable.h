@@ -111,4 +111,9 @@ size_t        treetable_size             (TreeTable const * const table);
 bool          treetable_contains_key     (TreeTable const * const table, const void *key);
 size_t        treetable_contains_value   (TreeTable const * const table, const void *value);
 
+int           balanced                   (TreeTable* t);
+int           height                     (RBNode *n, RBNode *s);
+int           sorted                     (TreeTable* t);
+int           sorted_node                (RBNode *n, RBNode *s);
+
 #endif /* COLLECTIONS_C_TREETABLE_H */

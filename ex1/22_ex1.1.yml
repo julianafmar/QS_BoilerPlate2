@@ -77,12 +77,11 @@ report:
   - bug:
       type: 
       lineno: 124
-      class: FP (FN se considerarmos que so o primeiro comando e que conta)
+      class: FP 
       description: 
         Result of 'malloc' is converted to a pointer of type 'char',
         which is incompatible with sizeof operand type 'char *'
       recommendation: 
-        Let it be, let it live, its fine
   # End of the seventh vulnerability report entry
 
   # Start of the eighth vulnerability report entry
@@ -112,29 +111,26 @@ report:
 
   # Start of the tenth vulnerability report entry
   - bug:
-      type: Null Dereference
-      lineno: 72
+      type: Buffer Overflow
+      lineno: 120
       class: 
-      description: Access to field 'size' results in a dereference of a null pointer (loaded from variable 'field') 
-      recommendation: 
+      description: 
+        Call to function 'memcpy' is insecure as it does not provide 
+        security checks introduced in the C11 standard. Replace with
+        analogous functions that support length arguments or provides 
+        boundary checks such as 'memcpy_s' in case of C11
+      recommendation: #DÚVIDA: como funciona o memcpy
   # End of the tenth vulnerability report entry
 
   # Start of the eleventh vulnerability report entry
   - bug:
       type: Buffer Overflow
-      lineno: 120
-      class: 
-      description: Call to function 'memcpy' is insecure as it does not provide security checks introduced 
-        in the C11 standard. Replace with analogous functions that support length arguments or provides 
-        boundary checks such as 'memcpy_s' in case of C11
-      recommendation: 
-  # End of the eleventh vulnerability report entry
-
-  # Start of the twelfth vulnerability report entry
-  - bug:
-      type: 
       lineno: 132
       class: 
       description:
+        Call to function 'memcpy' is insecure as it does not provide 
+        security checks introduced in the C11 standard. Replace with
+        analogous functions that support length arguments or provides 
+        boundary checks such as 'memcpy_s' in case of C11
       recommendation: 
-  # End of the twelfth vulnerability report entry
+  # End of the eleventh vulnerability report entry

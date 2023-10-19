@@ -2,32 +2,26 @@
 # vulnerabilities.
 
 report:
-  # Start of the first vulnerability report entry
+  # Start of the second vulnerability report entry
   - bug:
-      # 'type': The name of the type of vulnerability discovered, e.g.,
-      # Nullptr Dereference
-      type: Nullptr Dereference
-      # 'lineno': The number of the line where the bug was discovered
-      lineno: 106
-      # 'class' options:
-      #   - 'tp' (true positive) for confirmed vulnerabilities
-      #   - 'fp' (false positive) for incorrectly flagged issues
-      #   - 'fn' (false negative) for bugs identified manually
-      class: tp
-      # 'description': Additional details or context about the vulnerability
-      description: optional
-      # 'recommendation': Suggested actions or mitigations for the vulnerability
-      recommendation: optional
-  # End of the first vulnerability report entry
-
-
-
-
-  # Start of the fifth vulnerability report entry
-  - bug:
-      type: 
-      lineno: 
-      class: 
+      type: Use After Free
+      lineno: 132
+      class: FN
       description:
+        Not found by any tool. Variable 'entry->val' is freed in line 108,
+        and after being freed used in line 132
       recommendation: 
-  # End of the fifth vulnerability report entry
+        Allocate variable again
+  # End of the second vulnerability report entry
+
+  # Start of the second vulnerability report entry
+  - bug:
+      type: Use After Free
+      lineno: 76
+      class: FN
+      description:
+        Not found by any tool. Variable 'map' can be 67 and its always 
+        used in line 76 and 77.
+      recommendation: 
+        Exiting
+  # End of the second vulnerability report entry
