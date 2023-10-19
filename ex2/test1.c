@@ -8,11 +8,11 @@ int main () {
     TreeTable *tt;
     treetable_new(&tt);
 
-    int a_key, a_val, b_key, b_val; 
-    klee_make_symbolic(&a_key, sizeof(int), "a_key");
-    klee_make_symbolic(&b_key, sizeof(int), "b_key");
-    klee_make_symbolic(&a_val, sizeof(int), "a_val");
-    klee_make_symbolic(&b_val, sizeof(int), "b_val");
+    void  *a_key, *a_val, *b_key, *b_val; 
+    klee_make_symbolic(&a_key, sizeof(void), "a_key");
+    klee_make_symbolic(&b_key, sizeof(void), "b_key");
+    klee_make_symbolic(&a_val, sizeof(void), "a_val");
+    klee_make_symbolic(&b_val, sizeof(void), "b_val");
 
     treetable_add(tt, a_key, a_val);
     treetable_add(tt, b_key, b_val);
