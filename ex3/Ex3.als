@@ -22,10 +22,12 @@ fact { // transposta ###########################################################
         n.nnext.nprev = n
 } 
 //###############################################################################
+
 // nprev and nnext are acyclic
 fact {
-    all n: Node |
-        n !in n.^nprev && n !in n.^nnext
+    /*all n: Node |
+        n !in n.^nprev && n !in n.^nnext*/
+    no (^nprev & iden)
 }
 
 pred insert[n:Node, hn:HeadNode] {

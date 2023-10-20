@@ -112,6 +112,7 @@ bool          treetable_contains_key     (TreeTable const * const table, const v
 size_t        treetable_contains_value   (TreeTable const * const table, const void *value);
 
 int           balanced                   (TreeTable* t);
+int           balanced_node              (RBNode* n, RBNode* s);
 int           height                     (RBNode *n, RBNode *s);
 int           sorted                     (TreeTable* t);
 int           sorted_node                (RBNode *n, RBNode *s);

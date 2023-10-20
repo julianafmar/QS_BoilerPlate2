@@ -522,21 +522,46 @@ int balanced(TreeTable* t) {
     RBNode *n = t->root;
     RBNode *s = t->sentinel;
 
-    int leftHeight = 0;
-    int rightHeight = 0;
-
     if (n == s)
         return 1;
 
-    if (n->left != s)
-        leftHeight = height(n->left, s);
-    if (n->right != s)
-        rightHeight = height(n->right, s);
-
-    if (abs(leftHeight - rightHeight) <= 1)
+    if (n->left != s && n->right != s) {
+        if (height(n->left, s) == height(n->right, s))
+            return balanced_node(n->left, s) && balanced_node(n->right, s);
+        else
+            return 0;
+    } else if (n->left != s) {
+        if (height(n->left, s) == 0)
+            return 1;
+        else
+            return 0;
+    } else if (n->right != s) {
+        if (height(n->right, s) == 0)
+            return 1;
+        else
+            return 0;
+    } else
         return 1;
-    else
-        return 0;
+}
+
+int balanced_node(RBNode* n, RBNode* s) {
+    if (n->left != s && n->right != s) {
+        if (height(n->left, s) == height(n->right, s))
+            return balanced_node(n->left, s) && balanced_node(n->right, s);
+        else
+            return 0;
+    } else if (n->left != s) {
+        if (height(n->left, s) == 0)
+            return 1;
+        else
+            return 0;
+    } else if (n->right != s) {
+        if (height(n->right, s) == 0)
+            return 1;
+        else
+            return 0;
+    } else
+        return 1;
 }
 
 int height(RBNode *n, RBNode *s) {
