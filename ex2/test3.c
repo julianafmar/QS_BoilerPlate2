@@ -20,7 +20,8 @@ int main () {
     assert(tt != NULL);
 
     void *out;
-    assert(treetable_get_first_key(tt, &out) == CC_OK && out == a_key);
+    if(a_key < b_key) assert(treetable_get_first_key(tt, &out) == CC_OK && out == a_key);
+    else assert(treetable_get_first_key(tt, &out) == CC_OK && out == b_key);
 
     treetable_destroy(tt);
     
