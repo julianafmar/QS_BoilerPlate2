@@ -1,6 +1,6 @@
 #include "klee/klee.h"
 #include <assert.h>
-#include "treetable.h"
+#include "../treetable.h"
 
 void test1();
 
