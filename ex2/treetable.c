@@ -388,10 +388,12 @@ static void rebalance_after_insert(TreeTable *table, RBNode *z)
 
 static INLINE RBNode *tree_min(TreeTable const * const table, RBNode *n)
 {
-    RBNode *s = table->sentinel;
+    if (n != table->sentinel) {
+        RBNode *s = table->sentinel;
 
-    while (n->left != s)
-        n = n->left;
+        while (n->left != s)
+            n = n->left;
+    }
     return n;
 }
 
