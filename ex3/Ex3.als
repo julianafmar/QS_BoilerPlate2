@@ -15,19 +15,21 @@ fact {
 }
 
 // If a node n has a previous node, then the previous node has a next node that's n. The same goes for next nodes.
-fact { // transposta ###########################################################
-    all n: Node |
-        n.nprev.nnext = n
-    all n: Node |
-        n.nnext.nprev = n
-} 
-//###############################################################################
+fact {
+    nprev = ~nnext
+}
 
 // nprev and nnext are acyclic
 fact {
-    /*all n: Node |
-        n !in n.^nprev && n !in n.^nnext*/
     no (^nprev & iden)
+    no (^nnext & iden)
+}
+
+// every node that's not the first node has a previous node and every node that's not the last node has a next node
+fact {
+    // tem de se usar ^
+    all n: Node, h: HeadNode |
+        n != h.frst && n != h.lst => one(n.nprev) && one(n.nnext)
 }
 
 pred insert[n:Node, hn:HeadNode] {
@@ -41,4 +43,4 @@ pred remove[n:Node, hn:HeadNode] {
     n.nnext.nprev = n.nprev
 }
 
-run { } 
+run { } for exactly 5 Node, exactly 2 HeadNode 
