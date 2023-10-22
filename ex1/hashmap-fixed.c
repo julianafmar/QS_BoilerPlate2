@@ -60,28 +60,36 @@ struct hashmap_entry {
 hashmap_t hashmap_new(int size) {
   hashmap_t map = (hashmap_t)malloc(sizeof(struct hashmap_s));
 
+  /* BUG-5 */
   if(map == NULL) {
     exit(1);
   }
+  /* Fixes 5 */
 
   struct hashmap_field *fields =
       (struct hashmap_field *)malloc(sizeof(struct hashmap_field) * size);
 
   if (!fields) {
     free(map);
+    /* BUG-12 */
     exit(1);
+    /* Fixes 12 */
   }
 
   for (int i = 0; i < size; i++) {
     struct hashmap_field *field = &fields[i];
+    /* BUG-6 */
     if(field != NULL) {
       field->size = 0;
       field->entries = NULL;
     }
+    /* Fixes 6*/
   }
 
+  /* BUG-1 */
   if(map == NULL) exit(1);
-
+  /* Fixes 1*/
+    
   map->size = size;
   map->fields = fields;
 
@@ -126,30 +134,43 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
   field->size++;
   struct hashmap_entry *entries = (struct hashmap_entry *)malloc(
       field->size * sizeof(struct hashmap_entry));
+  /* BUG-10 */
   if (size(entries) >= (field->size - 1) * sizeof(struct hashmap_entry) 
       && size(field->entries) >= (field->size - 1) * sizeof(struct hashmap_entry))
     memcpy(entries, field->entries,
          (field->size - 1) * sizeof(struct hashmap_entry));
   else exit(1);
+  /* Fixes 10 */
 
   entry = &entries[field->size - 1];
   entry->key = (char *)malloc(sizeof(key));
+  /* BUG-9 */
   if(size(entry->key) >= size(key)) {
     strcpy(entry->key, key);
   } else exit(1);
+  /* Fixes 9 */
 
   field->entries = entries;
 
+  /* BUG-2 */
   free(entries);
+  /* Fixes 2*/
 
 set_val:
   if (value != NULL) {
     void *val = malloc(length);
 
-    if (size(val) >= length && size(value) >= length) {
+    /* BUG-11*/ if (size(val) >= length && size(value) >= length && /* BUG-4 */ val != NULL) {
       entry->val = memcpy(val, value, length);
-    } else exit(1);
-    
+    } 
+    /* BUG-3*/ 
+    else {
+      free(val);
+      exit(1);
+    }
+    /* Fixes 3 */
+    /* Fixes 4*/
+    /* Fixes 11*/
     entry->len = length;
   } else {
     free(entry->key);
@@ -192,7 +213,9 @@ int main() {
 
   int *ret = (int *)hashmap_get(map, key);
   assert(*ret == value);
+  /* BUG-8 */
   free(ret); // Verificar
+  /* Fixes 8 */
 
   hashmap_free(map);
   return 0;

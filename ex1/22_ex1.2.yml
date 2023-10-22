@@ -1,8 +1,20 @@
 # This YAML template is designed for capturing information about discovered
 # vulnerabilities.
 
-report:
-  # Start of the second vulnerability report entry
+  # Start of the twelfth vulnerability report entry
+  - bug:
+      type: Use After Free
+      lineno: 76
+      class: FN
+      description:
+        Not found by any tool. Variable 'map' can be freed in line 67 and its
+        always used in line 76 and 77.
+      recommendation: 
+        Exiting
+  # End of the twelfth vulnerability report entry
+
+  report: #Rever este, é preciso saber se o memcpy também aloca
+  # Start of the thirteenth vulnerability report entry
   - bug:
       type: Use After Free
       lineno: 132
@@ -12,16 +24,4 @@ report:
         and after being freed used in line 132
       recommendation: 
         Allocate variable again
-  # End of the second vulnerability report entry
-
-  # Start of the second vulnerability report entry
-  - bug:
-      type: Use After Free
-      lineno: 76
-      class: FN
-      description:
-        Not found by any tool. Variable 'map' can be 67 and its always 
-        used in line 76 and 77.
-      recommendation: 
-        Exiting
-  # End of the second vulnerability report entry
+  # End of the thirteenth vulnerability report entry

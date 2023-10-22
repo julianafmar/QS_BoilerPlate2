@@ -528,7 +528,7 @@ int balanced(TreeTable* t) {
         return 1;
 
     if (n->left != s && n->right != s) {
-        if (height(n->left, s) == height(n->right, s))
+        if (abs(height(n->left, s) - height(n->right, s)) <= 1)
             return balanced_node(n->left, s) && balanced_node(n->right, s);
         else
             return 0;
@@ -548,7 +548,7 @@ int balanced(TreeTable* t) {
 
 int balanced_node(RBNode* n, RBNode* s) {
     if (n->left != s && n->right != s) {
-        if (height(n->left, s) == height(n->right, s))
+        if (abs(height(n->left, s) - height(n->right, s)) <= 1)
             return balanced_node(n->left, s) && balanced_node(n->right, s);
         else
             return 0;

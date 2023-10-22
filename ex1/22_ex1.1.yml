@@ -65,7 +65,7 @@ report:
   - bug: 
       type: Null Pointer Dereference
       lineno: 72
-      class: TP (FN se considerarmos que so o primeiro comando e que conta)
+      class: TP 
       description: 
         Found with clang analizer. In function hashmap_new, if allocation of the variable "fields" fails,
         the code is assigning "0" to the variable "size" that is a part of "field" which is a null pointer.
@@ -88,7 +88,7 @@ report:
   - bug:
       type: Memory Leak
       lineno: 170
-      class: TP (FN se considerarmos que so o primeiro comando e que conta)
+      class: TP 
       description: 
         Found with clang analizer. Variable "ret" is allocated and not freed 
         after used
