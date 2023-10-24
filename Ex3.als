@@ -1,3 +1,5 @@
+module Ex3
+
 sig Node { 
     var nprev: lone Node,
     var nnext: lone Node
@@ -10,11 +12,7 @@ sig HeadNode {
 
 // The first node doesn't have a previous node and the last node doesn't have a next node
 fact C1 {
-    always(no(frst.nprev))
-}
-
-fact {
-    always(no(lst.nnext))
+    always(no(frst.nprev)) and always(no(lst.nnext))
 }
 
 // If a node n has a previous node, then the previous node has a next node that's n. The same goes for next nodes.
@@ -24,23 +22,19 @@ fact C2 {
 
 // nprev and nnext are acyclic
 fact C3 {
-    always(no(^nprev & iden))
-}
-
-fact {
-    always(no(^nnext & iden))
+    always(no(^nprev & iden)) and always(no(^nnext & iden))
 }
 
 // if a list has more than 0 nodes it should have lst and frst
 fact C4 {
     all n : Node |
-        always(lone(n.*nnext.~lst))
+        n.nnext != none => always(one(n.*nnext.~lst))
 }
 
 // every node can only be in exactly one list
 fact C5 {
     all n : Node |
-        always(lone(n.*nprev.~frst))
+        n.nnext != none => always(one(n.*nprev.~frst))
 }
 
 // the first node is connected to the last of its list
@@ -49,7 +43,7 @@ fact C6 {
         always(hn.frst.*nnext.~lst = hn)
 }
 
-fact {
+fact C7 {
     all hn : HeadNode |
         always(hn.lst.*nprev.~frst = hn)
 }
@@ -145,7 +139,7 @@ pred remove_nodes[n : Node, hn : HeadNode] {
     lst' = lst
 }
 
-run { eventually some n : Node, h : HeadNode | remove[n, h] } for exactly 2 HeadNode, exactly 5 Node
+run { eventually some n : Node, h : HeadNode | insert[n, h] } for exactly 2 HeadNode, exactly 5 Node
 
 
 
@@ -153,7 +147,18 @@ run { eventually some n : Node, h : HeadNode | remove[n, h] } for exactly 2 Head
 
 
 
+/*
+3.1
+- nodes can't be linked to themselves
+- nodes can either be free single dll
+- specify the invariants of facts with always
+- fact {always inv}
+...
 
+3.3
+- insert -> whatever you want
+
+*/
 
 
 
