@@ -62,6 +62,7 @@ pred insert_none[n:Node, hn:HeadNode] {
     hn.lst' = n
     //frame-condition:
     nnext' = nnext
+    nprev' = nprev
 }
 
 pred insert_nodes[n : Node, hn : HeadNode] {
@@ -166,12 +167,6 @@ run { eventually some n : Node, h : HeadNode | insert[n, h] } for exactly 2 Head
 
 
 
-
-/*
-Coisas
-if a list has more than 0 nodes it should have lst and frst
-when it has only one node make sure its the first and last
-*/
 
 // every node that's not the first node has a previous node and every node that's not the last node has a next node
 /*fact {
