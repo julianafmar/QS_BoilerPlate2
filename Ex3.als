@@ -25,27 +25,32 @@ fact C3 {
     always(no(^nprev & iden)) and always(no(^nnext & iden))
 }
 
-// if a list has more than 0 nodes it should have lst and frst
+// every node can only be in exactly one list
 fact C4 {
     all n : Node |
-        n.nnext != none => always(one(n.*nnext.~lst))
+        n.nnext != none or n.nprev != none => always(one(n.*nprev.~frst))   
 }
 
-// every node can only be in exactly one list
 fact C5 {
-    all n : Node |
-        n.nnext != none => always(one(n.*nprev.~frst))
+    all hn : HeadNode |
+        hn.frst != none => always(one(hn.frst.*nprev.~frst))
 }
 
-// the first node is connected to the last of its list
+// The first node is connected to the last of its list
 fact C6 {
     all hn : HeadNode |
-        always(hn.frst.*nnext.~lst = hn)
+        hn.frst != none => always(hn.frst.*nnext.~lst = hn)
 }
 
+// If a HeadNode has a first node, then it has a last node. The same goes for last nodes.
 fact C7 {
-    all hn : HeadNode |
-        always(hn.lst.*nprev.~frst = hn)
+    one(frst) => one(lst) 
+    one(lst) => one(frst)
+}
+
+//The number of lasts is equal to the number of lasts
+fact C8 {
+    #frst = #lst
 }
 
 pred insert[n:Node, hn:HeadNode] {

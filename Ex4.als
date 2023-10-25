@@ -7,8 +7,7 @@ sig ONode extends Node {
     id : one Id
 }
 
-sig OHeadNode extends HeadNode {
-}
+sig OHeadNode extends HeadNode { }
 
 // list has to be ordered
 /*fact {
@@ -16,13 +15,13 @@ sig OHeadNode extends HeadNode {
         n1.next = n2 && n1 != n2 implies n1.id.lte[n2.id]
 }*/
 
-// all ids are unique
+// All ids are unique
 fact {
   always all n1, n2 : ONode | 
     n1 != n2 implies n1.id != n2.id 
 }
 
-// list has to be ordered
+// List has to be ordered
 fact {
     always all n1, n2 : ONode |
         n2 in n1.*(nnext) and n2 != n1 implies n1.id.lte[n2.id]
@@ -92,4 +91,4 @@ pred OInsertMiddle[hn : HeadNode, n : ONode] {
     lst' = lst
 }
 
-run { eventually some n : ONode, h : OHeadNode | OInsert[h, n] } for 2 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 5 ONode, 5 Id
+run { eventually some n : ONode, h : OHeadNode | OInsert[h, n] } for 3 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 4 ONode, 4 Id
