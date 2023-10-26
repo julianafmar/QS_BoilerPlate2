@@ -75,11 +75,11 @@ report:
 
   # Start of the seventh vulnerability report entry
   - bug:
-      type: 
+      type: Buffer Overflow
       lineno: 124
       class: FP 
       description: 
-        Result of 'malloc' is converted to a pointer of type 'char',
+        Found with clang analizer. Result of 'malloc' is converted to a pointer of type 'char',
         which is incompatible with sizeof operand type 'char *'
       recommendation: 
   # End of the seventh vulnerability report entry
@@ -102,7 +102,7 @@ report:
       lineno: 125
       class: TP
       description: 
-        Call to function 'strcpy' is insecure as it does not provide
+        Found with clang analizer. Call to function 'strcpy' is insecure as it does not provide
         bounding of the memory buffer. 
       recommendation: 
         Replace unbounded copy functions with analogous functions 
@@ -113,24 +113,26 @@ report:
   - bug:
       type: Buffer Overflow
       lineno: 120
-      class: 
+      class: TP
       description: 
-        Call to function 'memcpy' is insecure as it does not provide 
-        security checks introduced in the C11 standard. Replace with
-        analogous functions that support length arguments or provides 
-        boundary checks such as 'memcpy_s' in case of C11
-      recommendation: #DÚVIDA: como funciona o memcpy
+        Found with clang analizer. Call to function 'memcpy' is insecure as
+        it does not provide security checks introduced in the C11 standard. 
+        Replace with analogous functions that support length arguments or 
+        provides boundary checks such as 'memcpy_s' in case of C11
+      recommendation: 
+        Check the sizes of the arguments
   # End of the tenth vulnerability report entry
 
   # Start of the eleventh vulnerability report entry
   - bug:
       type: Buffer Overflow
       lineno: 132
-      class: 
+      class: TP
       description:
         Call to function 'memcpy' is insecure as it does not provide 
         security checks introduced in the C11 standard. Replace with
         analogous functions that support length arguments or provides 
         boundary checks such as 'memcpy_s' in case of C11
       recommendation: 
+        Check the sizes of the arguments
   # End of the eleventh vulnerability report entry

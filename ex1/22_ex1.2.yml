@@ -12,16 +12,3 @@
       recommendation: 
         Exiting
   # End of the twelfth vulnerability report entry
-
-  report: #Rever este, é preciso saber se o memcpy também aloca
-  # Start of the thirteenth vulnerability report entry
-  - bug:
-      type: Use After Free
-      lineno: 132
-      class: FN
-      description:
-        Not found by any tool. Variable 'entry->val' is freed in line 108,
-        and after being freed used in line 132
-      recommendation: 
-        Allocate variable again
-  # End of the thirteenth vulnerability report entry
