@@ -572,7 +572,7 @@ int sorted(TreeTable* t) {
     if (n == s)
         return 1;
 
-    sorted_node(n, s);
+    return sorted_node(n, s);
 }
 
 int sorted_node(RBNode* n, RBNode* s) {
