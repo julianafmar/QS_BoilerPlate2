@@ -9,12 +9,6 @@ sig ONode extends Node {
 
 sig OHeadNode extends HeadNode { }
 
-// list has to be ordered
-/*fact {
-    all n1, n2 : ONode | 
-        n1.next = n2 && n1 != n2 implies n1.id.lte[n2.id]
-}*/
-
 // All ids are unique
 fact {
   always all n1, n2 : ONode | 
@@ -33,11 +27,11 @@ fact {
         n in hn.frst.*(nnext) implies n in ONode
 }
 
-pred OInsert[hn : OHeadNode, n : ONode] {
-    OInsertFirst[hn, n] or OInsertLast[hn, n] or OInsertMiddle[hn, n] or OInsertEmpty[hn, n]
+pred OInsert[n : ONode, hn : OHeadNode] {
+    OInsertFirst[n, hn] or OInsertLast[n, hn] or OInsertMiddle[n, hn] or OInsertEmpty[n, hn]
 }
 
-pred OInsertFirst[hn : OHeadNode, n : ONode] {
+pred OInsertFirst[n : ONode, hn : OHeadNode] {
     //pre-condition: 
     hn.frst != none and hn.lst != none
     n.id.lte[hn.frst.id]
@@ -51,7 +45,7 @@ pred OInsertFirst[hn : OHeadNode, n : ONode] {
     lst' = lst
 }
 
-pred OInsertLast[hn : OHeadNode, n : ONode] {
+pred OInsertLast[n : ONode, hn : OHeadNode] {
     //pre-condition:
     hn.frst != none and hn.lst != none
     hn.lst.id.lte[n.id]
@@ -65,30 +59,29 @@ pred OInsertLast[hn : OHeadNode, n : ONode] {
     frst' = frst
 }
 
-pred OInsertEmpty[hn : OHeadNode, n : ONode] {
+pred OInsertEmpty[n : ONode, hn : OHeadNode] {
     //pre-conditions:
     hn.frst = none and hn.lst = none
     //post-conditions:
-    hn.frst' = n
-    hn.lst' = n
+    lst' = lst + (hn -> n)
+    frst' = frst + (hn -> n)
     //frame-conditions:
     nnext' = nnext
     nprev' = nprev
 }
 
-pred OInsertMiddle[hn : HeadNode, n : ONode] {
+pred OInsertMiddle[n : ONode, hn : OHeadNode] {
     //pre-condition:
     hn.frst != none and hn.lst != none
-    hn.frst.id.gt[n.id] and n.id.lt[hn.lst.id]
+    hn.frst.id.lt[n.id] and hn.lst.id.gt[n.id]
     //post-condition:
     all n1 : ONode |
-        n1.id.lte[n.id] && n1.nnext.id.gte[n.id] implies n1.nnext' = n and 
-                                            n1.nnext.nprev' = n and 
-                                            n.nnext' = n1.nnext and
-                                            n.nprev' = n1
+        n1.id = max[prevs[n.id] & hn.frst.*nnext.id] => 
+            nprev' = nprev - (n1.nnext -> n1) + (n -> n1) + (n1.nnext -> n) and
+            nnext' = nnext - (n1 -> n1.nnext) + (n1 -> n) + (n -> n1.nnext)
     //frame-condition:
     frst' = frst
     lst' = lst
 }
 
-run { eventually some n : ONode, h : OHeadNode | OInsert[h, n] } for 3 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 4 ONode, 4 Id
+run { eventually some n : ONode, h : OHeadNode | OInsert[n, h] } for 3 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 5 ONode, 5 Id

@@ -10,191 +10,150 @@ sig HeadNode {
     var lst: lone Node
 }
 
-// The first node doesn't have a previous node and the last node doesn't have a next node
+// The first node doesn't have a previous node
 fact C1 {
-    always(no(frst.nprev)) and always(no(lst.nnext))
+    always(no(frst.nprev))
+}
+
+// The last node doesn't have a next node
+fact C2 {
+    always(no(lst.nnext))
 }
 
 // If a node n has a previous node, then the previous node has a next node that's n. The same goes for next nodes.
-fact C2 {
+fact C3 {
     always(nprev = ~nnext)
 }
 
-// nprev and nnext are acyclic
-fact C3 {
-    always(no(^nprev & iden)) and always(no(^nnext & iden))
-}
-
-// every node can only be in exactly one list
+// nprev is not acyclic
 fact C4 {
-    all n : Node |
-        n.nnext != none or n.nprev != none => always(one(n.*nprev.~frst))   
+    always(no(^nprev & iden))
 }
 
+// nnext is not acyclic
 fact C5 {
+    always(no(^nnext & iden))
+}
+
+// Every node can only be in exactly one list (be connected to one HeadNode)
+fact C6 {
+    all n : Node |
+        always(n.nnext != none or n.nprev != none => one(n.*nprev.~frst))
+}
+
+// A frst Node cannot be connected to more than one HeadNode
+fact C7 {
     all hn : HeadNode |
-        hn.frst != none => always(one(hn.frst.*nprev.~frst))
+        always(hn.frst != none => one(hn.frst.*nprev.~frst))
 }
 
 // The first node is connected to the last of its list
-fact C6 {
+fact C8 {
     all hn : HeadNode |
-        hn.frst != none => always(hn.frst.*nnext.~lst = hn)
+        always(hn.frst != none => hn.frst.*nnext.~lst = hn)
 }
 
 // If a HeadNode has a first node, then it has a last node. The same goes for last nodes.
-fact C7 {
-    one(frst) => one(lst) 
-    one(lst) => one(frst)
+fact C9 {
+    all hn : HeadNode |
+        always(one(hn.frst) => one(hn.lst) or one(hn.lst) => one(hn.frst))
 }
 
-//The number of lasts is equal to the number of lasts
-fact C8 {
-    #frst = #lst
+// The number of lasts is equal to the number of lasts
+fact C11 {
+    always #frst = #lst
 }
 
-pred insert[n:Node, hn:HeadNode] {
-    insert_none[n, hn] or insert_nodes[n, hn]
+pred insert[n : Node, hn : HeadNode] {
+    insertNone[n, hn] or insertNodes[n, hn]
 }
 
-pred insert_none[n:Node, hn:HeadNode] {
-    //pre-condition: 
+pred insertNone[n : Node, hn : HeadNode] {
+    // pre-condition: 
     hn.frst = none
     hn.lst = none
     n.*nprev.~frst = none
-    //post-condition:
+    // post-condition:
     hn.frst' = n
     hn.lst' = n
-    //frame-condition:
+    // frame-condition:
     nnext' = nnext
     nprev' = nprev
 }
 
-pred insert_nodes[n : Node, hn : HeadNode] {
-    //pre-condition:
+pred insertNodes[n : Node, hn : HeadNode] {
+    // pre-condition:
     hn.frst != none 
     hn.lst != none
     n.*nprev.~frst = none
-    //post-conditions:
+    // post-conditions:
     n.nprev' = hn.lst
     hn.lst.nnext' = n
     hn.lst' = n
     nnext' = nnext + (hn.lst -> n)
     nprev' = nprev + (n -> hn.lst)
-    //frame-conditions:
+    // frame-conditions:
     frst' = frst
 }
 
 pred remove[n : Node, hn : HeadNode] {
-    remove_only_element[n, hn] or remove_first[n, hn] or remove_last[n, hn] or remove_nodes[n, hn]
+    removeOnlyElement[n, hn] or removeFirst[n, hn] or removeLast[n, hn] or removeNodes[n, hn]
 }
 
-pred remove_only_element[n : Node, hn : HeadNode] {
-    //pre-conditions:
+pred removeOnlyElement[n : Node, hn : HeadNode] {
+    // pre-conditions:
     hn.lst != none and hn.frst != none
     hn.lst = hn.frst
     n = hn.frst
-    //post-condition:
-    hn.lst' = none
-    hn.frst' = none
-    //frame-conditions:
+    // post-condition:
+    lst' = lst - (hn -> n)
+    frst' = frst - (hn -> n)
+    // frame-conditions:
     nnext' = nnext
     nprev' = nprev
 }
 
-pred remove_first[n : Node, hn : HeadNode] {
-    //pre-conditions:
+pred removeFirst[n : Node, hn : HeadNode] {
+    // pre-conditions:
     hn.frst != none and hn.lst != none
     hn.frst != hn.lst
     n = hn.frst
-    //post-conditions:
+    // post-conditions:
     hn.frst' = hn.frst.nnext
     hn.frst.nnext.nprev' = none
     nnext' = nnext - (hn.frst -> hn.frst.nnext)
     nprev' = nprev - (hn.frst.nnext -> hn.frst)
-    //frame_conditions:
+    // frame_conditions:
     lst' = lst
 }
 
-pred remove_last[n : Node, hn : HeadNode] {
-    //pre-conditions:
+pred removeLast[n : Node, hn : HeadNode] {
+    // pre-conditions:
     hn.frst != none and hn.lst != none
     hn.frst != hn.lst
     n = hn.lst
-    //post-conditions:
+    // post-conditions:
     hn.lst' = hn.lst.nprev
     hn.lst.nprev.nnext' = none
-    nnext' = nnext - (hn.lst.nprev -> hn.lst)
     nprev' = nprev - (hn.lst -> hn.lst.nprev)
-    //frame_conditions:
+    nnext' = nnext - (hn.lst.nprev -> hn.lst)
+    // frame_conditions:
     frst' = frst    
 }
 
-pred remove_nodes[n : Node, hn : HeadNode] {
-    //pre-conditions:
+pred removeNodes[n : Node, hn : HeadNode] {
+    // pre-conditions:
     hn.frst != none and hn.lst != none
     hn.frst != hn.lst
     n in hn.frst.*(nnext)
-    //post-conditions:
+    // post-conditions:
     n.nprev.nnext' = n.nnext
     n.nnext.nprev' = n.nprev
     nnext' = nnext - (n.nprev -> n) - (n -> n.nnext) + (n.nprev -> n.nnext)
     nprev' = nprev - (n.nnext -> n) - (n -> n.nprev) + (n.nnext -> n.nprev)
-    //frame_conditions:
+    // frame_conditions:
     frst' = frst
     lst' = lst
 }
 
-run { eventually some n : Node, h : HeadNode | insert[n, h] } for exactly 2 HeadNode, exactly 5 Node
-
-
-
-
-
-
-
-/*
-3.1
-- nodes can't be linked to themselves
-- nodes can either be free single dll
-- specify the invariants of facts with always
-- fact {always inv}
-...
-
-3.3
-- insert -> whatever you want
-
-*/
-
-
-
-
-
-
-
-
-// every node that's not the first node has a previous node and every node that's not the last node has a next node
-/*fact {
-    all n: Node, h: HeadNode |
-        n != h.frst implies one(n.nprev) &&
-        n != h.lst implies one(n.nnext)
-}*/
-
-// every node can only be in exactly one list
-/*fact C6 {
-    all n : Node |
-        one(firsts_reached[n]) and one(lasts_reached[n])
-}
-fun firsts_reached[n : Node] : set HeadNode {
-    n.*nprev.~frst
-}
-fun lasts_reached[n : Node] : set HeadNode {
-    n.*nnext.~lst
-}*/
-
-// every node can only be in exactly one list
-/*fact {
-    all n: Node, hn1, hn2: HeadNode |
-        n in hn1.frst.*(nnext) => n !in hn2.frst.*(nnext) and
-        n in hn1.lst.*(nprev) => n !in hn2.lst.*(nprev)
-}*/
+run { eventually some n : Node, h : HeadNode | insertNone[n, h] } for exactly 2 HeadNode, exactly 5 Node
