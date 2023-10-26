@@ -214,7 +214,7 @@ int main() {
   int *ret = (int *)hashmap_get(map, key);
   assert(*ret == value);
   /* BUG-8 */
-  free(ret); // Verificar
+  free(ret); 
   /* Fixes 8 */
 
   hashmap_free(map);

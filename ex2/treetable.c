@@ -526,24 +526,8 @@ int balanced(TreeTable* t) {
 
     if (n == s)
         return 1;
-
-    if (n->left != s && n->right != s) {
-        if (abs(height(n->left, s) - height(n->right, s)) <= 1)
-            return balanced_node(n->left, s) && balanced_node(n->right, s);
-        else
-            return 0;
-    } else if (n->left != s) {
-        if (height(n->left, s) == 0)
-            return 1;
-        else
-            return 0;
-    } else if (n->right != s) {
-        if (height(n->right, s) == 0)
-            return 1;
-        else
-            return 0;
-    } else
-        return 1;
+    
+    return balanced_node(n, s);
 }
 
 int balanced_node(RBNode* n, RBNode* s) {
@@ -588,38 +572,22 @@ int sorted(TreeTable* t) {
     if (n == s)
         return 1;
 
-    if (n->left != s && n->right != s) {
-        if (t->cmp(n->key, n->left->key) < 0 && t->cmp(n->key, n->right->key) > 0)
-            return sorted_node(n->left, s) && sorted_node(n->right, s);
-        else
-            return 0;
-    } else if (n->left != s) {
-        if (t->cmp(n->key, n->left->key) < 0)
-            return sorted_node(n->left, s);
-        else
-            return 0;
-    } else if (n->right != s) {
-        if (t->cmp(n->key, n->right->key) > 0)
-            return sorted_node(n->right, s);
-        else
-            return 0;
-    } else
-        return 1;
+    sorted_node(n, s);
 }
 
 int sorted_node(RBNode* n, RBNode* s) {
     if (n->left != s && n->right != s) {
-        if (cmp(n->key, n->left->key) < 0 && cmp(n->key, n->right->key) > 0)
+        if (*((int*)n->key) > *((int*)n->left->key) && *((int*)n->key) < *((int*)n->right->key))
             return sorted_node(n->left, s) && sorted_node(n->right, s);
         else
             return 0;
     } else if (n->left != s) {
-        if (cmp(n->key, n->left->key) < 0)
+        if (*((int*)n->key) > *((int*)n->left->key))
             return sorted_node(n->left, s);
         else
             return 0;
     } else if (n->right != s) {
-        if (cmp(n->key, n->right->key) > 0)
+        if (*((int*)n->key) < *((int*)n->right->key))
             return sorted_node(n->right, s);
         else
             return 0;
