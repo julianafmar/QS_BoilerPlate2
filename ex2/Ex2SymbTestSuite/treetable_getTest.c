@@ -19,9 +19,19 @@ int main () {
 
     treetable_add(tt, &a_key, a_val);
 
+    /*
+    Property: if treetable was created successfully it shouldn't be null
+    */
     assert(tt != NULL);
 
     void *out;
+
+    /*
+    Property: If we call the function treetable_get and the key used as 
+    argument is in the table, it should return CC_OK and it should set 
+    the out parameter to the value of the node and it should return 
+    CC_ERR_KEY_NOT_FOUND if the key is not in the table
+    */
     assert(treetable_get(tt, &a_key, &out) == CC_OK && strcmp(out, a_val) == 0);
     if (a_key != b_key) assert(treetable_get(tt, &b_key, &out) == CC_ERR_KEY_NOT_FOUND);
 

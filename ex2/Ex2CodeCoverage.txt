@@ -1,4 +1,4 @@
-/home/klee/klee_src/proj/Ex3ConcTestSuite/treetable_addConcreteTest.c:
+/home/klee/klee_src/proj/ex2/Ex3ConcTestSuite/treetable_addConcreteTest.c:
     1|       |#include "klee/klee.h"
     2|       |#include <assert.h>
     3|       |#include "../treetable.h"
@@ -62,7 +62,7 @@
    61|      1|    treetable_destroy(tt);
    62|      1|}
 
-/home/klee/klee_src/proj/Ex3ConcTestSuite/treetable_getConcreteTest.c:
+/home/klee/klee_src/proj/ex2/Ex3ConcTestSuite/treetable_getConcreteTest.c:
     1|       |#include "klee/klee.h"
     2|       |#include <assert.h>
     3|       |#include "../treetable.h"
@@ -123,7 +123,7 @@
    58|      1|    treetable_destroy(tt);
    59|      1|}
 
-/home/klee/klee_src/proj/Ex3ConcTestSuite/treetable_get_first_keyConcreteTest.c:
+/home/klee/klee_src/proj/ex2/Ex3ConcTestSuite/treetable_get_first_keyConcreteTest.c:
     1|       |#include "klee/klee.h"
     2|       |#include <assert.h>
     3|       |#include "../treetable.h"
@@ -148,7 +148,7 @@
    22|      1|    treetable_destroy(tt);
    23|      1|}
 
-/home/klee/klee_src/proj/Ex3ConcTestSuite/treetable_get_greater_thanConcreteTest.c:
+/home/klee/klee_src/proj/ex2/Ex3ConcTestSuite/treetable_get_greater_thanConcreteTest.c:
     1|       |#include "klee/klee.h"
     2|       |#include <assert.h>
     3|       |#include "../treetable.h"
@@ -221,7 +221,7 @@
    70|      1|    treetable_destroy(tt);
    71|      1|}
 
-/home/klee/klee_src/proj/treetable.c:
+/home/klee/klee_src/proj/ex2/treetable.c:
     1|       |/*
     2|       | * Collections-C
     3|       | * Copyright (C) 2013-2015 Srđan Panić <srdja.panic@gmail.com>
@@ -752,108 +752,76 @@
   526|       |
   527|      0|    if (n == s)
   528|      0|        return 1;
-  529|       |
-  530|      0|    if (n->left != s && n->right != s) {
-  531|      0|        if (abs(height(n->left, s) - height(n->right, s)) <= 1)
-  532|      0|            return balanced_node(n->left, s) && balanced_node(n->right, s);
-  533|      0|        else
-  534|      0|            return 0;
-  535|      0|    } else if (n->left != s) {
-  536|      0|        if (height(n->left, s) == 0)
-  537|      0|            return 1;
-  538|      0|        else
-  539|      0|            return 0;
-  540|      0|    } else if (n->right != s) {
-  541|      0|        if (height(n->right, s) == 0)
-  542|      0|            return 1;
-  543|      0|        else
-  544|      0|            return 0;
-  545|      0|    } else
-  546|      0|        return 1;
-  547|      0|}
-  548|       |
-  549|      0|int balanced_node(RBNode* n, RBNode* s) {
-  550|      0|    if (n->left != s && n->right != s) {
-  551|      0|        if (abs(height(n->left, s) - height(n->right, s)) <= 1)
-  552|      0|            return balanced_node(n->left, s) && balanced_node(n->right, s);
-  553|      0|        else
-  554|      0|            return 0;
-  555|      0|    } else if (n->left != s) {
-  556|      0|        if (height(n->left, s) == 0)
-  557|      0|            return 1;
-  558|      0|        else
-  559|      0|            return 0;
-  560|      0|    } else if (n->right != s) {
-  561|      0|        if (height(n->right, s) == 0)
-  562|      0|            return 1;
-  563|      0|        else
-  564|      0|            return 0;
-  565|      0|    } else
-  566|      0|        return 1;
-  567|      0|}
-  568|       |
-  569|      0|int height(RBNode *n, RBNode *s) {
-  570|      0|    if (n == s)
-  571|      0|        return 0;
-  572|       |
-  573|      0|    int leftHeight = 0;
-  574|      0|    int rightHeight = 0;
-  575|       |
-  576|      0|    if (n->left != s)
-  577|      0|        leftHeight = height(n->left, s);
-  578|      0|    if (n->right != s)
-  579|      0|        rightHeight = height(n->right, s);
-  580|       |
-  581|      0|    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
-  582|      0|}
-  583|       |
-  584|      0|int sorted(TreeTable* t) {
-  585|      0|    RBNode *n = t->root;
-  586|      0|    RBNode *s = t->sentinel;
-  587|       |
-  588|      0|    if (n == s)
-  589|      0|        return 1;
-  590|       |
-  591|      0|    if (n->left != s && n->right != s) {
-  592|      0|        if (t->cmp(n->key, n->left->key) < 0 && t->cmp(n->key, n->right->key) > 0)
-  593|      0|            return sorted_node(n->left, s) && sorted_node(n->right, s);
-  594|      0|        else
-  595|      0|            return 0;
-  596|      0|    } else if (n->left != s) {
-  597|      0|        if (t->cmp(n->key, n->left->key) < 0)
-  598|      0|            return sorted_node(n->left, s);
-  599|      0|        else
-  600|      0|            return 0;
-  601|      0|    } else if (n->right != s) {
-  602|      0|        if (t->cmp(n->key, n->right->key) > 0)
-  603|      0|            return sorted_node(n->right, s);
-  604|      0|        else
-  605|      0|            return 0;
-  606|      0|    } else
-  607|      0|        return 1;
-  608|      0|}
-  609|       |
-  610|      0|int sorted_node(RBNode* n, RBNode* s) {
-  611|      0|    if (n->left != s && n->right != s) {
-  612|      0|        if (cmp(n->key, n->left->key) < 0 && cmp(n->key, n->right->key) > 0)
-  613|      0|            return sorted_node(n->left, s) && sorted_node(n->right, s);
-  614|      0|        else
-  615|      0|            return 0;
-  616|      0|    } else if (n->left != s) {
-  617|      0|        if (cmp(n->key, n->left->key) < 0)
-  618|      0|            return sorted_node(n->left, s);
-  619|      0|        else
-  620|      0|            return 0;
-  621|      0|    } else if (n->right != s) {
-  622|      0|        if (cmp(n->key, n->right->key) > 0)
-  623|      0|            return sorted_node(n->right, s);
-  624|      0|        else
-  625|      0|            return 0;
-  626|      0|    } else
-  627|      0|        return 1;
-  628|      0|}
+  529|       |    
+  530|      0|    return balanced_node(n, s);
+  531|      0|}
+  532|       |
+  533|      0|int balanced_node(RBNode* n, RBNode* s) {
+  534|      0|    if (n->left != s && n->right != s) {
+  535|      0|        if (abs(height(n->left, s) - height(n->right, s)) <= 1)
+  536|      0|            return balanced_node(n->left, s) && balanced_node(n->right, s);
+  537|      0|        else
+  538|      0|            return 0;
+  539|      0|    } else if (n->left != s) {
+  540|      0|        if (height(n->left, s) == 0)
+  541|      0|            return 1;
+  542|      0|        else
+  543|      0|            return 0;
+  544|      0|    } else if (n->right != s) {
+  545|      0|        if (height(n->right, s) == 0)
+  546|      0|            return 1;
+  547|      0|        else
+  548|      0|            return 0;
+  549|      0|    } else
+  550|      0|        return 1;
+  551|      0|}
+  552|       |
+  553|      0|int height(RBNode *n, RBNode *s) {
+  554|      0|    if (n == s)
+  555|      0|        return 0;
+  556|       |
+  557|      0|    int leftHeight = 0;
+  558|      0|    int rightHeight = 0;
+  559|       |
+  560|      0|    if (n->left != s)
+  561|      0|        leftHeight = height(n->left, s);
+  562|      0|    if (n->right != s)
+  563|      0|        rightHeight = height(n->right, s);
+  564|       |
+  565|      0|    return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
+  566|      0|}
+  567|       |
+  568|      0|int sorted(TreeTable* t) {
+  569|      0|    RBNode *n = t->root;
+  570|      0|    RBNode *s = t->sentinel;
+  571|       |
+  572|      0|    if (n == s)
+  573|      0|        return 1;
+  574|       |
+  575|      0|    return sorted_node(n, s);
+  576|      0|}
+  577|       |
+  578|      0|int sorted_node(RBNode* n, RBNode* s) {
+  579|      0|    if (n->left != s && n->right != s) {
+  580|      0|        if (*((int*)n->key) > *((int*)n->left->key) && *((int*)n->key) < *((int*)n->right->key))
+  581|      0|            return sorted_node(n->left, s) && sorted_node(n->right, s);
+  582|      0|        else
+  583|      0|            return 0;
+  584|      0|    } else if (n->left != s) {
+  585|      0|        if (*((int*)n->key) > *((int*)n->left->key))
+  586|      0|            return sorted_node(n->left, s);
+  587|      0|        else
+  588|      0|            return 0;
+  589|      0|    } else if (n->right != s) {
+  590|      0|        if (*((int*)n->key) < *((int*)n->right->key))
+  591|      0|            return sorted_node(n->right, s);
+  592|      0|        else
+  593|      0|            return 0;
+  594|      0|    } else
+  595|      0|        return 1;
+  596|      0|}
 
-/home/klee/klee_src/proj/treetable_example.c:
+/home/klee/klee_src/proj/ex2/treetable_example.c:
     1|       |#include <stdio.h>
     2|       |#include "treetable.h"
     3|       |#include "Ex3ConcTestSuite/treetable_addConcreteTest.c"

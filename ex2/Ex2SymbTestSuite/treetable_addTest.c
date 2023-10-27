@@ -20,7 +20,16 @@ int main () {
     treetable_add(tt, &a_key, a_val);
     treetable_add(tt, &b_key, b_val);
 
+    /*
+    Property: if treetable was created successfully it shouldn't be null
+    */
     assert(tt != NULL);
+
+    /*
+    Property: If a new node is added to the treetable and we call the function 
+    treetable_contains_key it should return true if the treetable contains that
+    node and false otherwise
+    */
 
     assert(treetable_contains_key(tt, &a_key));
 

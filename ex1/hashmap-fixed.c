@@ -145,10 +145,11 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
   entry = &entries[field->size - 1];
   entry->key = (char *)malloc(sizeof(key));
   /* BUG-9 */
-  if(size(entry->key) >= size(key)) {
+  if(size(entry->key) >= size(key) && /*BUG-13*/entry->key != NULL) {
     strcpy(entry->key, key);
   } else exit(1);
   /* Fixes 9 */
+  /* Fixes 13 */
 
   field->entries = entries;
 

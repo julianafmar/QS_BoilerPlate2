@@ -12,3 +12,15 @@
       recommendation: 
         Exiting
   # End of the twelfth vulnerability report entry
+
+    # Start of the thirteenth vulnerability report entry
+  - bug:
+      type: Spacial Bug
+      lineno: 125
+      class: FN
+      description:
+        Not found by any tool. Variable 'entry->key' is allocated and is 
+        used after without checking if is was successfully allocated.
+      recommendation: 
+        Check if it was successfully allocated
+  # End of the twelfth vulnerability report entry
