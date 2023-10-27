@@ -84,4 +84,9 @@ pred OInsertMiddle[n : ONode, hn : OHeadNode] {
     lst' = lst
 }
 
+// 4.2
+run { } for 3 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 5 ONode, 5 Id
+
+// 4.4
 run { eventually some n : ONode, h : OHeadNode | OInsert[n, h] } for 3 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 5 ONode, 5 Id
+run { eventually some n : ONode, h : OHeadNode | remove[n, h] } for 3 HeadNode, 5 Node, exactly 2 OHeadNode, exactly 5 ONode, 5 Id

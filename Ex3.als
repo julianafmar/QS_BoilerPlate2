@@ -156,4 +156,9 @@ pred removeNodes[n : Node, hn : HeadNode] {
     lst' = lst
 }
 
-run { eventually some n : Node, h : HeadNode | insertNone[n, h] } for exactly 2 HeadNode, exactly 5 Node
+// 3.2
+run { } for exactly 2 HeadNode, exactly 5 Node
+
+// 3.4
+run { eventually some n : Node, h : HeadNode | insert[n, h] } for exactly 2 HeadNode, exactly 5 Node
+run { eventually some n : Node, h : HeadNode | remove[n, h] } for exactly 2 HeadNode, exactly 5 Node
